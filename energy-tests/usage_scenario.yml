@@ -1,0 +1,54 @@
+---
+name: Wordpress Data Puppeteer Scenario
+author: Arne Tarara <arne@green-coding.berlin>
+description: Wordpress sample with pre-populated DB (pages and plugins) where a simple Puppeteer flow is executed
+
+compose-file: !include compose.yml
+
+sci:
+  R_d: page request
+
+services:
+  gcb-wordpress-mariadb:
+    ports:
+      - 3306:3306
+# This command is needed, cause the container needs a bootup time to work
+    setup-commands:
+      - sleep 20
+    networks:
+      - gcb-wordpress-mariadb-network
+  gcb-wordpress-apache:
+    ports:
+      - 9875:9875
+    networks:
+      - gcb-wordpress-mariadb-network
+    folder-destination: "/tmp/repo"
+  gcb-puppeteer:
+    image: greencoding/puppeteer-chrome
+    setup-commands:
+      - cp /tmp/repo/puppeteer-flow.js /var/www/puppeteer-flow.js
+    networks:
+      - gcb-wordpress-mariadb-network
+
+flow:
+  - name: Check Website
+    container: gcb-puppeteer
+    commands:
+      - type: console
+        command: node /var/www/puppeteer-flow.js
+        note: Starting Puppeteer Flow
+        log-stdout: true
+        read-notes-stdout: true
+        read-sci-stdout: true
+      - type: console
+        command: sleep 30
+        note: Idling
+      - type: console
+        command: node /var/www/puppeteer-flow.js
+        note: Starting Puppeteer Flow again
+        log-stdout: true
+        read-notes-stdout: true
+        read-sci-stdout: true
+
+networks:
+  gcb-wordpress-mariadb-network:
