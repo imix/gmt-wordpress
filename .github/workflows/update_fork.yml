@@ -35,10 +35,6 @@ jobs:
             git merge upstream/master
             git push
 
-            echo "Updating fork github-actions-test-callstring branch..."
-            git checkout github-actions-test-callstring
-            git merge upstream/master
-            git push
           else
             echo "No updates from the original repository."
           fi
