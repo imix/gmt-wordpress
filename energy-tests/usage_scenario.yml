@@ -5,6 +5,8 @@ description: Wordpress sample with pre-populated DB (pages and plugins) where a 
 
 compose-file: !include compose.yml
 
+ignore-unsupported-compose: true
+
 sci:
   R_d: page request
 
