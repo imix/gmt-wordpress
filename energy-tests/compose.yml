@@ -1,4 +1,4 @@
-version: '2'
+version: '3.9'
 services:
   gcb-wordpress-mariadb:
     build:
@@ -18,9 +18,9 @@ services:
       test: [
         "CMD", "bash", "-c", "mysqladmin ping -h localhost -u wordpress -pwordpress | grep \"mysqld is alive\""
       ]
-      interval: "1h" # effectively turns repeated healthchecks during runtime off
+      #interval: "1h" # effectively turns repeated healthchecks during runtime off
       start_period: "60s"
-      start_interval: "1s"
+      #start_interval: "1s"
 
   gcb-wordpress-apache:
     build:
